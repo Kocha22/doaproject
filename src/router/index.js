@@ -19,6 +19,7 @@ import ListUser from '../views/account/ListUser.vue'
 import ReferenceBook from '../views/account/ReferenceBook.vue'
 import TypeReference from '../views/account/TypeReference.vue'
 import RegisterView from '../views/RegisterView.vue'
+import BiofarmById from '../views/account/BiofarmById.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -83,7 +84,12 @@ const router = createRouter({
         {
           path: 'list-biofarm',
           name: 'ListBiofarn',
-          component: ListBiofarm
+          component: ListBiofarm,
+        },
+        {
+          path: 'list-biofarm/:id',
+          name: 'BiofarmById',
+          component: BiofarmById
         },
         {
           path: 'list-organic',
