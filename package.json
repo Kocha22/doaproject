@@ -25,6 +25,7 @@
     "pinia": "^2.0.32",
     "pinia-plugin-persistedstate": "^3.1.0",
     "sweetalert": "^2.1.2",
+    "sweetalert2": "^11.7.5",
     "vue": "^3.2.47",
     "vue-advanced-cropper": "^2.8.8",
     "vue-fontawesome": "^0.0.2",

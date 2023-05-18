@@ -55,9 +55,9 @@
                 </div>
                 <div id="res" ></div>
                 <div class="btn_inner">
-                    <button class="button_1 btn btn-info" data-url='.' name="but1">На рассмотрений</button>
-                    <button class="button_1 btn btn-success" data-url='' name="but2">Одобрено</button>
-                    <button class="button_1 btn btn-danger" data-url='' name="but3">Отказано</button>
+                    <button class="button_1 btn btn-info" @click.prevent="sendEmail('consider', post.id)" name="but1">На рассмотрений</button>
+                    <button class="button_1 btn btn-success" @click.prevent="sendEmail('approve', post.id)" name="but2">Одобрено</button>
+                    <button class="button_1 btn btn-danger" @click.prevent="sendEmail('cancel', post.id)" name="but3">Отказано</button>
                 </div>
                 </form>
             </div>
@@ -83,5 +83,25 @@
             console.log(err)
         }
     }
+
+    const clickedButton = ref('');
+
+    const sendEmail = async (buttonName, post_id) => {
+        event.preventDefault()
+        console.log(buttonName)
+        if (!clickedButton.value) {
+            // Only execute if no button was previously clicked
+            clickedButton.value = buttonName;
+            
+            try {
+            const response = await axios.post(`api/sendemail/${buttonName}/${post_id}`);
+            clickedButton.value = ''
+            console.log(response.data); // Response from the backend
+            } catch (error) {
+            console.error(error);
+            clickedButton.value = ''
+            }
+        }
+    };
 
 </script>

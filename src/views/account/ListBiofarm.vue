@@ -117,6 +117,7 @@ let rayons = ref(null)
 let village = ref(null)
 let page = ref(1)
 let posts = ref(null)
+let posts3 = ref(null)
 let pageCount = ref(null)
 let selectedOption = ref('')
 let selectedRayon = ref('')
@@ -135,7 +136,8 @@ const getPosts = async () => {
         posts2.value = areas.data[0].children
         pageCount.value = response.data.page_count
         posts.value = response.data.paginate.data
-        console.log(posts)
+        posts3.value = response.data.posts3.data
+        console.log(posts3)
         loading = true
     } catch (err) {
         console.log(err)
