@@ -20,6 +20,7 @@ import ReferenceBook from '../views/account/ReferenceBook.vue'
 import TypeReference from '../views/account/TypeReference.vue'
 import RegisterView from '../views/RegisterView.vue'
 import BiofarmById from '../views/account/BiofarmById.vue'
+import ShowApplicant from '../views/account/ShowApplicant.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -80,6 +81,11 @@ const router = createRouter({
           path: 'list-applicant',
           name: 'ListApplicant',
           component: ListApplicant
+        },
+        {
+          path: 'list-applicant/:id',
+          name: 'ShowApplicant',
+          component: ShowApplicant
         },
         {
           path: 'list-biofarm',

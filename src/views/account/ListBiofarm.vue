@@ -168,6 +168,7 @@ function onChange (event) {
     if(area_id === 'oblast') {
         getArea(id)
         selectedRayon.value = '';
+        selectedVillage.value = ''
     } else if(area_id === 'rayon') {
         getVillage(id)
         selectedVillage.value = ''
