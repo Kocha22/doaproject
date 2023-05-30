@@ -1,106 +1,108 @@
 <template>
     <div v-if="loading">Loading...</div>
     <div class="content-wrapper">
-        <select id='oblast' name="oblast" class="choice" @change.prevent="onChange($event)" v-model="selectedOption">
-                <option value="0">Выберите адрес</option>
-                <option
-                    v-for="(post, i) in posts2"
-                    :value="post.id"
-                    :key="post.id"  
-                    :data-id="post.id"                              
-                    >{{ post.name_ru }}</option
-                >
-                </select>
-                <select id="rayon" name="rayon"  class="choice"  @change.prevent="onChange($event)" v-model="selectedRayon">
-                <option value='0'>-- Выберите из списка  --</option>
-                
-                <option v-show="rayons.length"
-                    v-for="(post, i) in rayons"
-                    :value="post.id"
-                    :key="post.id"  
-                    :data-id="post.id"                                
-                    >{{ post.name_ru }}</option
-                >
-                </select>
-                <select id="village" name="village"  class="choice" v-model="selectedVillage">
-                <option value='0'>-- Выберите из списка  --</option>
-                <option v-show="village.length"
-                    v-for="(post, i) in village"
-                    :value="post.id"
-                    :key="post.id"  
-                    :data-id="post.id"                                  
-                    >{{ post.name_ru }}</option
-                >
-        </select>
+        <section class="content text-sm table-sm">
+            <select id='oblast' name="oblast" class="choice" @change.prevent="onChange($event)" v-model="selectedOption">
+                    <option value="0">Выберите адрес</option>
+                    <option
+                        v-for="(post, i) in posts2"
+                        :value="post.id"
+                        :key="post.id"  
+                        :data-id="post.id"                              
+                        >{{ post.name_ru }}</option
+                    >
+                    </select>
+                    <select id="rayon" name="rayon"  class="choice"  @change.prevent="onChange($event)" v-model="selectedRayon">
+                    <option value='0'>-- Выберите из списка  --</option>
+                    
+                    <option v-show="rayons.length"
+                        v-for="(post, i) in rayons"
+                        :value="post.id"
+                        :key="post.id"  
+                        :data-id="post.id"                                
+                        >{{ post.name_ru }}</option
+                    >
+                    </select>
+                    <select id="village" name="village"  class="choice" v-model="selectedVillage">
+                    <option value='0'>-- Выберите из списка  --</option>
+                    <option v-show="village.length"
+                        v-for="(post, i) in village"
+                        :value="post.id"
+                        :key="post.id"  
+                        :data-id="post.id"                                  
+                        >{{ post.name_ru }}</option
+                    >
+            </select>
 
-        
-        <input type="text" v-model="searchQuery" placeholder="Search">
-        
-        <table id="customers">        
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Статус фермера</th>
-                    <th>Область</th>
-                    <th>Район</th>
-                    <th>Название села</th>
-                    <th>Название малых групп</th>
-                    <th>ФИО фермера</th>
-                    <th>Действие</th>
+            
+            <input type="text" v-model="searchQuery" placeholder="Search">
+            
+            <table id="customers">        
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Статус фермера</th>
+                        <th>Область</th>
+                        <th>Район</th>
+                        <th>Название села</th>
+                        <th>Название малых групп</th>
+                        <th>ФИО фермера</th>
+                        <th>Действие</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="post  in filteredData" :key="post.id">
+                    <td>{{ post.id }}</td>
+                    <td>{{ post.farmer_status }}</td>
+                    <td>
+                        <p v-if="post.oblasts">
+                        <span>
+                            {{ post.oblasts.name_ru }}
+                        </span>
+                        </p>
+                        <p v-else>{{ post.oblast }} </p>
+                    </td>
+                    <td>
+                        <p v-if="post.rayons">
+                        <span>
+                            {{ post.rayons.name_ru }}
+                        </span>
+                        </p>
+                        <p v-else>{{ post.rayon }} </p>
+                    </td>
+                    <td>
+                        <p v-if="post.villages">
+                        <span>
+                            {{ post.villages.name_ru }}
+                        </span>
+                        </p>
+                        <p v-else>{{ post.village }} </p>
+                    </td>
+                    <td>{{ post.small_groups }}</td>
+                    <td>{{ post.farmer_name }}</td>
+                    <td>
+                        <div class="action_icons">
+                        <router-link :to="'/account/list-biofarm/' + post.id">
+                        <input type="submit" title="Показать" class="eye-icon" />
+                        </router-link>
+                        <router-link :to="'/account/list-biofarm/' + post.id"><input type="submit" title="Редактировать" class="draw-icon"></router-link>
+                        <router-link :to="'/account/list-biofarm/' + post.id"><input type="submit" title="Удалить" class="delete-icon"></router-link>
+                        </div>
+                    </td>
                 </tr>
-            </thead>
-            <tbody>
-                <tr v-for="post  in filteredData" :key="post.id">
-                <td>{{ post.id }}</td>
-                <td>{{ post.farmer_status }}</td>
-                <td>
-                    <p v-if="post.oblasts">
-                    <span>
-                        {{ post.oblasts.name_ru }}
-                    </span>
-                    </p>
-                    <p v-else>{{ post.oblast }} </p>
-                </td>
-                <td>
-                    <p v-if="post.rayons">
-                    <span>
-                        {{ post.rayons.name_ru }}
-                    </span>
-                    </p>
-                    <p v-else>{{ post.rayon }} </p>
-                </td>
-                <td>
-                    <p v-if="post.villages">
-                    <span>
-                        {{ post.villages.name_ru }}
-                    </span>
-                    </p>
-                    <p v-else>{{ post.village }} </p>
-                </td>
-                <td>{{ post.small_groups }}</td>
-                <td>{{ post.farmer_name }}</td>
-                <td>
-                    <div class="action_icons">
-                    <router-link :to="'/account/list-biofarm/' + post.id">
-                     <input type="submit" title="Показать" class="eye-icon" />
-                     </router-link>
-                    <router-link :to="'/account/list-biofarm/' + post.id"><input type="submit" title="Редактировать" class="draw-icon"></router-link>
-                    <router-link :to="'/account/list-biofarm/' + post.id"><input type="submit" title="Удалить" class="delete-icon"></router-link>
-                    </div>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+                </tbody>
+            </table>
 
-        <div class="flex items-center justify-center p-2">
-            <v-pagination
-                v-model="page"
-                :pages="pageCount"
-                :range-size="1"
-                active-color="#DCEDFF"
-                @update:modelValue="getPosts"
-            />
-        </div>
+            <div class="flex items-center justify-center p-2">
+                <v-pagination
+                    v-model="page"
+                    :pages="pageCount"
+                    :range-size="1"
+                    active-color="#DCEDFF"
+                    @update:modelValue="getPosts"
+                />
+            </div>
+        </section>
     </div>
 </template>
 
@@ -124,6 +126,7 @@ let selectedRayon = ref('')
 let selectedVillage = ref('')
 let searchQuery = ref('')
 let active = ref(false);
+let itemsPerPage = ref(10);
 
 onBeforeMount(async () => {
     await getPosts()
@@ -136,7 +139,7 @@ const getPosts = async () => {
         posts2.value = areas.data[0].children
         pageCount.value = response.data.page_count
         posts.value = response.data.paginate.data
-        posts3.value = response.data.posts3.data
+        posts3.value = response.data.posts3
         console.log(posts3)
         loading = true
     } catch (err) {
@@ -177,6 +180,12 @@ function onChange (event) {
     }
     
 }
+
+const paginatedData = computed(() => {
+      const startIndex = page * itemsPerPage;
+      const endIndex = startIndex + itemsPerPage;
+      return posts3.slice(startIndex, endIndex);
+})
 
 const filteredData = computed(() => {
       let filtered = posts.value;

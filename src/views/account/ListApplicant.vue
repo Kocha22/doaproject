@@ -1,59 +1,61 @@
 <template>
     <div class="content-wrapper">
-        <div div class="btn-group" role="group">
-            <button class="button_1 btn btn-orange" @click.prevent="setSelectedOption('all')"  name="but1">Поданные заявки</button>
-            <button class="button_1 btn btn-blue" name="but1" @click.prevent="setSelectedOption('4')" value="4">На рассмотрений</button>
-            <button class="button_1 btn btn-green" name="but2" @click.prevent="setSelectedOption('2')" value="2">Утвержденные</button>
-            <button class="button_1 btn btn-red" name="but3" @click.prevent="setSelectedOption('3')" value="3">Отклоненные заявки</button>
-        </div>
-        <section class="news">
-            <h1 class="title">Заявки</h1>
-            <div class="form-gr">
-                <input type="text" v-model="searchQuery" placeholder="Search">
+        <section class="content text-sm table-sm">
+            <div div class="btn-group" role="group">
+                <button class="button_1 btn btn-orange" @click.prevent="setSelectedOption('all')"  name="but1">Поданные заявки</button>
+                <button class="button_1 btn btn-blue" name="but1" @click.prevent="setSelectedOption('4')" value="4">На рассмотрений</button>
+                <button class="button_1 btn btn-green" name="but2" @click.prevent="setSelectedOption('2')" value="2">Утвержденные</button>
+                <button class="button_1 btn btn-red" name="but3" @click.prevent="setSelectedOption('3')" value="3">Отклоненные заявки</button>
             </div>
-            <table id="customers">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Номер заявки</th>
-                        <th>ФИО</th>
-                        <th>Имя руководителя</th>
-                        <th>Адрес</th>
-                        <th>Телефон</th>
-                        <th>Email</th>
-                        <th>Действие</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="post in filteredData" :key="post.id">
-                        <td>{{ post.id }}</td>
-                        <td>{{ post.applicant_code }}</td>
-                        <td>{{ post.farmer_name }}</td>
-                        <td>{{ post.nameofdirector }}</td>
-                        <td>{{ post.adress }}</td>
-                        <td>{{ post.phone }}</td>
-                        <td>{{ post.email }}</td>
-                        <td>
-                            <div class="action_icons">
-                                <router-link :to="'/account/list-applicant/' + post.id">
-                                <input type="submit" title="Показать" class="eye-icon" />
-                                </router-link>
-                                <router-link :to="'/account/list-biofarm/' + post.id"><input type="submit" title="Редактировать" class="draw-icon"></router-link>
-                                <div @click.prevent="deleteApplicant(post.id)"><input type="submit" title="Удалить" class="delete-icon"></div>    
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <div class="flex items-center justify-center p-2">
-                <v-pagination 
-                    v-model="page"
-                    :pages="pageCount"
-                    :range-size="1"
-                    active-color="#DCEDFF"
-                    @update:modelValue="getPosts"
-                />
-            </div>
+            <section class="news">
+                <h1 class="title">Заявки</h1>
+                <div class="form-gr">
+                    <input type="text" v-model="searchQuery" placeholder="Search">
+                </div>
+                <table id="customers">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Номер заявки</th>
+                            <th>ФИО</th>
+                            <th>Имя руководителя</th>
+                            <th>Адрес</th>
+                            <th>Телефон</th>
+                            <th>Email</th>
+                            <th>Действие</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="post in filteredData" :key="post.id">
+                            <td>{{ post.id }}</td>
+                            <td>{{ post.applicant_code }}</td>
+                            <td>{{ post.farmer_name }}</td>
+                            <td>{{ post.nameofdirector }}</td>
+                            <td>{{ post.adress }}</td>
+                            <td>{{ post.phone }}</td>
+                            <td>{{ post.email }}</td>
+                            <td>
+                                <div class="action_icons">
+                                    <router-link :to="'/account/list-applicant/' + post.id">
+                                    <input type="submit" title="Показать" class="eye-icon" />
+                                    </router-link>
+                                    <router-link :to="'/account/edit-applicant/' + post.id"><input type="submit" title="Редактировать" class="draw-icon"></router-link>                              
+                                    <div @click.prevent="deleteApplicant(post.id)"><input type="submit" title="Удалить" class="delete-icon"></div>    
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>           
+                <div class="flex items-center justify-center p-2">
+                    <v-pagination 
+                        v-model="page"
+                        :pages="pageCount"
+                        :range-size="1"
+                        active-color="#DCEDFF"
+                        @update:modelValue="getPosts"
+                    />
+                </div>
+            </section>
         </section>
     </div>
 </template>
@@ -71,6 +73,7 @@ import { onBeforeMount, ref, computed } from 'vue';
     let pageCount = ref(null)
     const selectedOption = ref('');
     let searchQuery = ref('')
+    let isDelete = ref(false)
 
     onBeforeMount(async () => {
         await getPosts()
@@ -93,12 +96,7 @@ import { onBeforeMount, ref, computed } from 'vue';
     };
 
     const filteredData = computed(() => {      
-      let filtered;
-      if(selectedOption.value == 'all') {
-        filtered = posts.value;
-      } else {
-        filtered = posts2.value
-      }
+      let filtered = posts2.value;
       
       // Filter based on selected option
       if (selectedOption.value) {
@@ -129,6 +127,9 @@ import { onBeforeMount, ref, computed } from 'vue';
       const index = posts.value.findIndex(item => item.id === itemId);
       if (index !== -1) {
         posts.value.splice(index, 1); // Remove the item from the array
+        isDelete = true;
+        console.log('deleted');
+        getPosts();
       }
     };
 

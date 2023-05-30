@@ -1,5 +1,5 @@
 <template>
-    <aside class="main-sidebar sidebar-light-primary elevation-1">
+    <aside class="main-sidebar sidebar-light-primary elevation-1 bg-info">
     <!-- Brand Logo -->
     <a href="../../#" class="brand-link">
         <img src="/img/Logo_DOA1.svg" width="35" height="25">
@@ -134,7 +134,9 @@
                 <router-link to="/account/list-land"
                     class="nav-link" >
                     <i class="nav-icon fas fa-grip-horizontal"></i>
-                    <p>Земельные участки</p>
+                    <p>Земельные участки
+                        <i class="right fas fa-angle-left"></i>
+                    </p>
                 </router-link>
             </li>
             <li class="nav-item ">   

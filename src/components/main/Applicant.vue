@@ -37,10 +37,10 @@
                                 <select id='' name="certification_id" class="choice" v-model="certification_id">
                                 <option value="">Выберите орган сертификации</option>
                                 <option
-                                    v-for="(post, i) in posts"
-                                    :value="post.name"
+                                    v-for="(item, i) in posts"
+                                    :value="item.id"
                                     :key="i"
-                                    >{{ post.name }}</option
+                                    >{{ item.name }}</option
                                 >
 
                                 </select>
@@ -81,34 +81,32 @@
                                 <option value="0" :selected="selected === 0">Выберите адрес</option>
                                 <option
                                     v-for="(post, i) in posts2"
-                                    :value="post.name_ru"
+                                    :value="post.id"
                                     :key="post.id"  
                                     :data-id="post.id"     
                                     :selected="selected === post.name_ru"                           
                                     >{{ post.name_ru }}</option
                                 >
                                 </select>
-                                <select id="rayon" name="rayon"  class="choice"  @change.prevent="onChange($event)" v-model="selected2">
-                                <option value='0' :selected="selected2 === 0">-- Выберите из списка  --</option>
+                                <select id="rayon" name="rayon"  class="choice"  @change.prevent="onChange($event)" v-model="rayon">
+                                <option value='0'>-- Выберите из списка  --</option>
                                 
                                 <option v-show="rayons.length"
-                                    v-for="(post, i) in rayons"
-                                    :value="post.name_ru"
-                                    :key="post.id"  
-                                    :data-id="post.id"   
-                                    :selected="selected2 === post.name_ru"                                
-                                    >{{ post.name_ru }}</option
+                                    v-for="(item, i) in rayons"
+                                    :value="item.id"
+                                    :key="item.id"  
+                                    :data-id="item.id"                                  
+                                    >{{ item.name_ru }}</option
                                 >
                                 </select>
                                 <select id="village" name="village"  class="choice"  v-model="villageAddress">
-                                <option value='0' :selected="selected3 === 0" >-- Выберите из списка  --</option>
+                                <option value='0'>-- Выберите из списка  --</option>
                                 <option v-show="village.length"
-                                    v-for="(post, i) in village"
-                                    :value="post.name_ru"
-                                    :key="post.id"  
-                                    :data-id="post.id"     
-                                    :selected="selected3 === post.name_ru"                              
-                                    >{{ post.name_ru }}</option
+                                    v-for="(item, i) in village"
+                                    :value="item.id"
+                                    :key="item.id"  
+                                    :data-id="item.id"                                 
+                                    >{{ item.name_ru }}</option
                                 >
                                 </select>
                                 <span class="text-danger error-text area_id_error"></span>
@@ -200,13 +198,13 @@
     let certification_id = ref(null)
     let tin = ref(null)
     let farmer_name = ref(null)
-    let nameofdirector = null
+    let nameofdirector = ref(null)
     let address = ref(null)
     let oblast = ref(null)
     let rayon = ref(null)
     let villageAddress = ref(null)
     let phone = ref(null)
-    let email = ref(null)
+    let email = ref('')
 
     let errors = ref([])
 
@@ -278,17 +276,17 @@
     const createPost = async () => {
         errors.value = []
         let data = new FormData();
-        data.append('applicant_code', applicant_code.value || '')
-        data.append('certification_id', certification_id.value || '')
-        data.append('tin', tin.value || '')
-        data.append('farmer_name', farmer_name.value || '')
-        data.append('nameofdirector', nameofdirector.value || '')
-        data.append('address', address.value || '')
-        data.append('oblast', oblast.value || '')
-        data.append('rayon', rayon.value || '')
-        data.append('villageAddress', villageAddress.value || '')
-        data.append('phone', phone.value || '')
-        data.append('email', email.value || '')
+        data.append('applicant_code', applicant_code.value)
+        data.append('certification_id', certification_id.value)
+        data.append('tin', tin.value)
+        data.append('farmer_name', farmer_name.value)
+        data.append('nameofdirector', nameofdirector.value)
+        data.append('address', address.value)
+        data.append('oblast', oblast.value)
+        data.append('rayon', rayon.value)
+        data.append('villageAddress', villageAddress.value)
+        data.append('phone', phone.value)
+        data.append('email', email.value)
         
         try {
             await axios.post('api/storeapplicant', data);   

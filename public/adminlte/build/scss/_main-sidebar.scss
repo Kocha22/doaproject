@@ -225,6 +225,10 @@
   z-index: $zindex-main-sidebar - 1;
 }
 
+.bg-info {
+  background-color: #17a2b8!important;
+}
+
 [class*="sidebar-light-"] {
   // Sidebar background color
   background-color: $sidebar-light-bg;
