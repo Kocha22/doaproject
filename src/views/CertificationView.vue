@@ -39,7 +39,7 @@
     const getPosts = async () => {
         try {
             const response = await axios.get('http://127.0.0.1:8000/api/posts')
-            posts.value = response.data
+            posts.value = response.data[0]
             console.log(posts)
         } catch (err) {
             console.log(err)

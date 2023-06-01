@@ -15,8 +15,8 @@
         class="
             mt-2
             inline-block
-            bg-green-500
-            hover:bg-green-700
+            bg-blue-500
+            hover:bg-blue-700
             font-bold
             text-white
             no-underline

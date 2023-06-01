@@ -28,7 +28,7 @@
                                 <tr>
                                     <td><label for="certification">Орган сертификации</label></td>
                                     <td class="alert_inner">                           
-                                    <select id='' name="certification_id" class="choice">
+                                    <select id='certification_id' name="certification_id" class="choice" v-model="certification_id">
                                     <option value="">Выберите орган сертификации</option>
                                     <option
                                         v-for="(item, i) in postsCertificate"
@@ -66,39 +66,42 @@
                                     <td><label for="nameofdirector">ФИО Руководителя</label></td>
                                     <td class="alert_inner">                            
                                     <input id="nameofdirector" class="form__input post__title" type="text" name="nameofdirector" v-model="nameofdirector">
+                                    <span v-if="errors.nameofdirector" class="text-red-500">
+                                        {{ errors.nameofdirector }}
+                                    </span>
                                     <span class="text-danger error-text nameofdirector_error"></span>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td><label for="area_id">Адрес регистрации</label></td>
                                     <td class="alert_inner">                            
-                                    <select id='oblast' name="oblast" class="choice" @change.prevent="onChange($event)">
+                                    <select id='oblast' name="oblast" class="choice" @change.prevent="onChange($event)" v-model="oblast">
                                     <option value="0">Выберите адрес</option>
                                     <option
                                         v-for="(item, i) in posts2"
                                         :value="item.id"
                                         :key="item.id"  
                                         :data-id="item.id"   
-                                        :selected="item.id == post.oblast"                     
+                                        :selected="item.id === post.oblast"                  
                                         >{{ item.name_ru }}</option>
                                     </select>
-                                    <select id="rayon" name="rayon"  class="choice"  @change.prevent="onChange($event)">
+                                    <select id="rayon" name="rayon"  class="choice"  @change.prevent="onChange($event)" v-model="rayon">
                                     <option value='0'>-- Выберите из списка  --</option>
                                     
                                     <option v-show="rayons.length"
                                         v-for="(item, i) in rayons"
-                                        :value="item.name_ru"
+                                        :value="item.id"
                                         :key="item.id"  
                                         :data-id="item.id"   
                                         :selected="item.id == post.rayon"                                
                                         >{{ item.name_ru }}</option
                                     >
                                     </select>
-                                    <select id="village" name="village"  class="choice">
+                                    <select id="village" name="village"  class="choice" v-model="villageAddress">
                                     <option value='0'>-- Выберите из списка  --</option>
                                     <option v-show="village.length"
                                         v-for="(item, i) in village"
-                                        :value="item.name_ru"
+                                        :value="item.id"
                                         :key="item.id"  
                                         :data-id="item.id"     
                                         :selected="item.id == post.village"                              
@@ -208,6 +211,9 @@
             postsCertificate.value = response.data
             posts2.value = areas.data[0].children
             post.value = res.data
+            oblast.value = post.value.oblast
+            rayon.value = post.value.rayon
+            villageAddress.value = post.value.village
             post_id = post.value.oblast
             applicant_code.value = post.value.applicant_code
             tin.value = post.value.tin
@@ -265,24 +271,33 @@
         
     }
 
-    const clickedButton = ref('');
-
-    const sendEmail = async (buttonName, post_id) => {
-        event.preventDefault()
-        console.log(buttonName)
-        if (!clickedButton.value) {
-            // Only execute if no button was previously clicked
-            clickedButton.value = buttonName;
-            
-            try {
-            const response = await axios.post(`api/sendemail/${buttonName}/${post_id}`);
-            clickedButton.value = ''
-            console.log(response.data); // Response from the backend
-            } catch (error) {
-            console.error(error);
-            clickedButton.value = ''
-            }
+    const createPost = async () => {
+        errors.value = []
+        let data = new FormData();
+        data.append('applicant_code', applicant_code.value)
+        data.append('certification_id', certification_id.value)
+        data.append('tin', tin.value)
+        data.append('farmer_name', farmer_name.value)
+        data.append('nameofdirector', nameofdirector.value)
+        data.append('address', address.value)
+        data.append('oblast', oblast.value)
+        data.append('rayon', rayon.value)
+        data.append('village', villageAddress.value)
+        data.append('phone', phone.value)
+        data.append('email', email.value)
+        
+        try {
+            await axios.post(`api/updateapplicant/${route.params.id}`, data);   
+            swal({title: "Good job", text: "You clicked the button!", type: 
+                "success"}).then(function(){ 
+                location.reload();
+                }
+                );      
+        } catch (err) {
+            errors.value = err.response.data.errors;
+            console.log(errors.value);
         }
-    };
+    }
+
 
 </script>

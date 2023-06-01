@@ -4,11 +4,11 @@
      <!-- Left navbar links -->
      <ul class="navbar-nav">
          <li class="nav-item">
-             <a class="nav-link" data-widget="pushmenu" href="#" role="button"  data-enable-remember="true"><i class="fas fa-bars"></i></a>
+             <a class="nav-link" data-widget="pushmenu" href="#" role="button"  data-enable-remember="true"><font-awesome-icon :icon="['fa', 'bars']" size="xl" /></a>
          </li>
          <li class="nav-item d-none d-sm-inline-block">
-             <a href="" class="nav-link">
-
+             <a href="#" class="nav-link">
+                {{ userStore.first_name }}
             </a>
          </li>         
      </ul>
@@ -31,7 +31,7 @@
          
          <li class="nav-item">
              <a class="nav-link" data-widget="fullscreen" href="#" role="button">
-                 <i class="fas fa-expand-arrows-alt"></i>
+                <font-awesome-icon :icon="['fa', 'maximize']" size="xl" />
              </a>
          </li>
          <li class="nav-item">

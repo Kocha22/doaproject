@@ -28,14 +28,14 @@
                             <tr>
                                 <td><label for="date_id">Дата заявки</label></td>
                                 <td class="alert_inner">                           
-                                <input id="date_id" class="form__input post__title" type="text" name="date_id" :value="date" disabled>                            
+                                <input id="date_id" class="form__input post__title" type="text" name="date_id" :value="day" disabled>                            
                                 </td>
                             </tr>
                             <tr>
                                 <td><label for="certification">Орган сертификации</label></td>
                                 <td class="alert_inner">                           
                                 <select id='' name="certification_id" class="choice" v-model="certification_id">
-                                <option value="">Выберите орган сертификации</option>
+                                <option :value="null">Выберите орган сертификации</option>
                                 <option
                                     v-for="(item, i) in posts"
                                     :value="item.id"
@@ -78,18 +78,17 @@
                                 <td><label for="area_id">Адрес регистрации</label></td>
                                 <td class="alert_inner">                            
                                 <select id='oblast' name="oblast" class="choice" @change.prevent="onChange($event)" v-model="oblast">
-                                <option value="0" :selected="selected === 0">Выберите адрес</option>
+                                <option :value="null">-- Выберите из списка --</option>
                                 <option
                                     v-for="(post, i) in posts2"
                                     :value="post.id"
                                     :key="post.id"  
-                                    :data-id="post.id"     
-                                    :selected="selected === post.name_ru"                           
+                                    :data-id="post.id"                             
                                     >{{ post.name_ru }}</option
                                 >
                                 </select>
                                 <select id="rayon" name="rayon"  class="choice"  @change.prevent="onChange($event)" v-model="rayon">
-                                <option value='0'>-- Выберите из списка  --</option>
+                                <option :value="null">-- Выберите из списка  --</option>
                                 
                                 <option v-show="rayons.length"
                                     v-for="(item, i) in rayons"
@@ -100,7 +99,7 @@
                                 >
                                 </select>
                                 <select id="village" name="village"  class="choice"  v-model="villageAddress">
-                                <option value='0'>-- Выберите из списка  --</option>
+                                <option :value="null">-- Выберите из списка  --</option>
                                 <option v-show="village.length"
                                     v-for="(item, i) in village"
                                     :value="item.id"
@@ -134,33 +133,27 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td>
-                                    <DisplayCropperButton
-                                        label="Profile Image"
-                                        btnText="Загрузить картинку"
-                                        @showModal="showModal = true"
-                                    />
+                                <td><label for="file">Файл</label></td>
+                                <td class="alert_inner">                            
+                                <input id="file" class="form__input post__title" type="file" name="file" v-on:change="handleFileUpload">
+                                <span class="text-danger error-text file_error"></span>
                                 </td>
                             </tr>
-                            <tr>
-                                <td>
-                                    <div class="flex flex-wrap mt-4 mb-6">
-                                        <div class="w-full px-3">
-                                            <CroppedImage
-                                                label="Cropped Image"
-                                                :image="image"
-                                            />
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
+                            
                         </tbody>
-                    </table>
-                    <div id="loaderIcon" class="spinner-border text-primary" style="display:none" role="status">
-                        <span class="sr-only">Loading...</span>
-                    </div>
+                    </table>                    
                     <div class="button-submit">                
-                    <button id="btn" class="button light-blue" type="submit" @submit.prevent="createPost">Send</button>
+                    <button id="btn" class="button light-blue w-5" type="submit" @submit.prevent="createPost">
+                            <div v-if="isLoading" class="place-content-center text-center items-center pl-4 pr-3">
+                                <svg class="animate-spin -ml-1 mr-1 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                            </div>
+                            <span v-else>
+                            Отправить 
+                            </span>                                           
+                    </button>
                     </div>
         </form>
         </div>
@@ -174,19 +167,19 @@
     import axios from 'axios';
     import { ref, onBeforeMount } from 'vue';
     import DisplayCropperButton from '@/components/global/DisplayCropperButton.vue';
-    import CropperModal from '@/components/global/CropperModal.vue';
-    import CroppedImage from '@/components/global/CroppedImage.vue';
     import {useFlash} from '@/composables/useFlash.js'
     import swal from 'sweetalert'
 
     let { flash } = useFlash();
 
+    let isLoading = ref(true)
     let imageData = null
     let image = ref(null)
     let showModal = ref(false)
     let date = new Date();
-    let day = date.toLocaleDateString();
+    let day = date.toISOString().split('T')[0];
     let id = ref('')
+    let file = ref(null)  
     let oblasts;
     let result;
     let active = ref(false);
@@ -200,7 +193,7 @@
     let farmer_name = ref(null)
     let nameofdirector = ref(null)
     let address = ref(null)
-    let oblast = ref(null)
+    let oblast = ref(null);
     let rayon = ref(null)
     let villageAddress = ref(null)
     let phone = ref(null)
@@ -229,10 +222,11 @@
             const response = await axios.get('api/posts')
             const areas = await axios.get('api/area')
             posts2.value = areas.data[0].children
-            posts.value = response.data
+            posts.value = response.data[0]
+            applicant_code.value = `${day}-${response.data[1]}`;            
             oblasts = areas.data[0].children
             console.log(areas.data[0].children[0].name_ru)
-            console.log(posts2)
+            console.log(response.data[1])
         } catch (err) {
             console.log(err)
         }
@@ -273,7 +267,12 @@
         
     }
 
+    function handleFileUpload(event) {
+      file.value = event.target.files[0];
+    }
+
     const createPost = async () => {
+        isLoading.value = true
         errors.value = []
         let data = new FormData();
         data.append('applicant_code', applicant_code.value)
@@ -287,16 +286,18 @@
         data.append('villageAddress', villageAddress.value)
         data.append('phone', phone.value)
         data.append('email', email.value)
+        data.append('file', file.value)
         
         try {
             await axios.post('api/storeapplicant', data);   
-            swal({title: "Good job", text: "You clicked the button!", type: 
+            swal({text: "Ваша заявка отправлена!", type: 
                 "success"}).then(function(){ 
                 location.reload();
                 }
                 );      
         } catch (err) {
             errors.value = err.response.data.errors;
+            isLoading.value =false
         }
     }
 
