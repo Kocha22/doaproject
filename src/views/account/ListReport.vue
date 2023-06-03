@@ -2,6 +2,21 @@
     <div v-if="loading">Loading...</div>
     <div class="content-wrapper">
         <section class="content text-sm table-sm">
+          <div class="flex">
+                <select id='oblast' name="oblast" class="choice block w-full p-2 mb-6 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" @change.prevent="onChange($event)" v-model="filterValue">
+                        <option value="">Выберите область</option>
+                        <option
+                            v-for="(post, i) in posts2"
+                            :value="post.id"
+                            :key="post.id"  
+                            :data-id="post.id"                              
+                            >{{ post.name_ru }}</option
+                        >
+                </select>
+            </div>
+
+            <input type="text" v-model="searchQuery" placeholder="Поиск" class="block w-full p-2 mb-6 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+
           <table id="customers">        
               <thead>
                   <tr>
@@ -80,6 +95,7 @@
             </ul>
           </div>
         </section>
+        <button @click="exportExcel">Экспортировать в эксел</button>
     </div>
 </template>
 
@@ -117,7 +133,7 @@ export default {
         this.total = response.data.total;
         this.updateDisplayedPages();
       } catch (error) {
-        console.error(error);
+        console.log(error);
       }
     },
     goToPage(page) {
@@ -139,6 +155,20 @@ export default {
     deleteUserUrl(userId) {
       return '{{ route("deletebio", ":user_id") }}'.replace(':user_id', userId);
     },
+    exportExcel() {
+      if(this.filterValue === '') {
+        var type = 'All';
+      } else {
+        type = this.filterValue
+      }
+      try {
+        const response = axios.get(`api/export/${type}`);
+        console.log('Hello');
+      }
+      catch(err) {
+        console.log(err);
+      }
+    }
   },
 };
 </script>

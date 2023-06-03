@@ -13,10 +13,16 @@
         <div id="login-form">
 
             <div>
-            <input type="email" name="email" placeholder="Email" v-model="email">
+            <input type="email" name="email2" placeholder="Email" v-model="email2">
+            <span v-if="errors.email2" class="text-red-500">
+                    {{ errors.email2[0] }}
+            </span>
             </div>
             <div>
             <input type="password" name="password" placeholder="Password" v-model="password">
+            <span v-if="errors.password" class="text-red-500">
+                    {{ errors.password[0] }}
+            </span>
             </div>
             <div>
             <button class="button" type="submit" @click="login">Войти</button>
@@ -38,7 +44,7 @@
     const userStore = useUserStore()
 
     let errors = ref([])
-    let email = ref(null)
+    let email2 = ref(null)
     let password = ref(null)
 
     
@@ -46,7 +52,7 @@
         errors.value = []
         try {
             let res = await axios.post('api/login', {
-                email: email.value,
+                email2: email2.value,
                 password: password.value,
             })
             axios.defaults.headers.common['Authorization'] = 'Bearer ' + res.data.token

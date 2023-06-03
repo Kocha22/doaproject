@@ -22,19 +22,19 @@
                                 <tr>
                                     <td><label for="date_id">Дата заявки</label></td>
                                     <td class="alert_inner">                           
-                                    <input id="date_id" class="form__input post__title" type="text" name="date_id" :value="date" disabled>                            
+                                    <input id="date_id" class="form__input post__title" type="text" name="date_id" :value="day" disabled>                            
                                     </td>
                                 </tr>
                                 <tr>
                                     <td><label for="certification">Орган сертификации</label></td>
                                     <td class="alert_inner">                           
                                     <select id='certification_id' name="certification_id" class="choice" v-model="certification_id">
-                                    <option value="">Выберите орган сертификации</option>
+                                    <option :value="null">Выберите орган сертификации</option>
                                     <option
                                         v-for="(item, i) in postsCertificate"
                                         :value="item.id"
                                         :key="i"
-                                        :selected="item.id == post.certification_id"
+                                        :selected="item.id === post.certification_id"
                                         >{{ item.name }}</option
                                     >
 
@@ -59,7 +59,9 @@
                                     <td><label for="farmer_name">ФИО оператора</label></td>
                                     <td class="alert_inner">                            
                                     <input id="farmer_name" class="form__input post__title" type="text" name="farmer_name" v-model="farmer_name">
-                                    <span class="text-danger error-text name_error"></span>
+                                    <span v-if="errors.farmer_name" class="text-red-500">
+                                        {{ errors.farmer_name[0] }}
+                                    </span>
                                     </td>
                                 </tr>
                                 <tr>
@@ -129,7 +131,7 @@
                                     <td><label for="email">Адрес электронной почты</label></td>
                                     <td class="alert_inner">                            
                                     <input id="email" class="form__input post__title" type="text" name="email" v-model="email">
-                                    <span class="text-danger error-text email_error"></span>
+                                    <span v-if="errors.email" class="error">{{ errors.email[0] }}</span>
                                     </td>
                                 </tr>
                             </tbody>
@@ -138,7 +140,17 @@
                             <span class="sr-only">Loading...</span>
                         </div>
                         <div class="button-submit">                
-                        <button id="btn" class="button light-blue" type="submit" @submit.prevent="createPost">Send</button>
+                        <button id="btn" class="button light-blue" type="submit" @submit.prevent="createPost">
+                            <div v-if="isLoading" class="place-content-center text-center items-center pl-4 pr-3">
+                                <svg class="animate-spin -ml-1 mr-1 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                            </div>
+                            <span v-else>
+                            Отправить 
+                            </span>          
+                        </button>
                         </div>
             </form>
         </div>
@@ -158,9 +170,10 @@
 
     let imageData = null
     let image = ref(null)
+    let isLoading = ref(false)
     let showModal = ref(false)
     let date = new Date();
-    let day = date.toLocaleDateString();
+    let day = date.toISOString().split('T')[0];
     let id = ref('')
     let oblasts;
     let result;
@@ -208,9 +221,10 @@
             let res = await axios.get('api/applicants/' + route.params.id)
             const areas = await axios.get('api/area')
             const response = await axios.get('api/posts')
-            postsCertificate.value = response.data
+            postsCertificate.value = response.data[0]
             posts2.value = areas.data[0].children
             post.value = res.data
+            certification_id.value = post.value.certification_id
             oblast.value = post.value.oblast
             rayon.value = post.value.rayon
             villageAddress.value = post.value.village
@@ -272,6 +286,7 @@
     }
 
     const createPost = async () => {
+        isLoading.value = true
         errors.value = []
         let data = new FormData();
         data.append('applicant_code', applicant_code.value)
@@ -296,6 +311,7 @@
         } catch (err) {
             errors.value = err.response.data.errors;
             console.log(errors.value);
+            isLoading.value = false
         }
     }
 

@@ -35,7 +35,7 @@
                                 <td><label for="certification">Орган сертификации</label></td>
                                 <td class="alert_inner">                           
                                 <select id='' name="certification_id" class="choice" v-model="certification_id">
-                                <option :value="null">Выберите орган сертификации</option>
+                                <option value="">Выберите орган сертификации</option>
                                 <option
                                     v-for="(item, i) in posts"
                                     :value="item.id"
@@ -44,7 +44,9 @@
                                 >
 
                                 </select>
-                                <span class="text-danger error-text certification_id_error"></span>
+                                <span v-if="errors.certification_id" class="text-red-500">
+                                        {{ errors.certification_id[0] }}
+                                </span>
                                 </td>
                             </tr>
                             <tr>
@@ -57,28 +59,34 @@
                                 <td><label for="tin">ИНН</label></td>
                                 <td class="alert_inner">                           
                                 <input id="tin" class="form__input post__title" type="text" name="tin" v-model="tin">
-                                <span class="text-danger error-text tin_error"></span>
+                                <span v-if="errors.tin" class="text-red-500">
+                                        {{ errors.tin[0] }}
+                                </span>
                                 </td>
                             </tr>
                             <tr>
                                 <td><label for="farmer_name">ФИО оператора</label></td>
                                 <td class="alert_inner">                            
                                 <input id="farmer_name" class="form__input post__title" type="text" name="farmer_name" v-model="farmer_name">
-                                <span class="text-danger error-text name_error"></span>
+                                <span v-if="errors.farmer_name" class="text-red-500">
+                                        {{ errors.farmer_name[0] }}
+                                </span>
                                 </td>
                             </tr>
                             <tr>
                                 <td><label for="nameofdirector">ФИО Руководителя</label></td>
                                 <td class="alert_inner">                            
                                 <input id="nameofdirector" class="form__input post__title" type="text" name="nameofdirector" v-model="nameofdirector">
-                                <span class="text-danger error-text nameofdirector_error"></span>
+                                <span v-if="errors.nameofdirector" class="text-red-500">
+                                        {{ errors.nameofdirector[0] }}
+                                </span>
                                 </td>
                             </tr>
                             <tr>
                                 <td><label for="area_id">Адрес регистрации</label></td>
                                 <td class="alert_inner">                            
                                 <select id='oblast' name="oblast" class="choice" @change.prevent="onChange($event)" v-model="oblast">
-                                <option :value="null">-- Выберите из списка --</option>
+                                <option value="">-- Выберите из списка --</option>
                                 <option
                                     v-for="(post, i) in posts2"
                                     :value="post.id"
@@ -87,8 +95,11 @@
                                     >{{ post.name_ru }}</option
                                 >
                                 </select>
+                                <span v-if="errors.oblast" class="text-red-500">
+                                        {{ errors.oblast[0] }}
+                                </span>
                                 <select id="rayon" name="rayon"  class="choice"  @change.prevent="onChange($event)" v-model="rayon">
-                                <option :value="null">-- Выберите из списка  --</option>
+                                <option value="">-- Выберите из списка  --</option>
                                 
                                 <option v-show="rayons.length"
                                     v-for="(item, i) in rayons"
@@ -98,8 +109,11 @@
                                     >{{ item.name_ru }}</option
                                 >
                                 </select>
+                                <span v-if="errors.rayon" class="text-red-500">
+                                        {{ errors.rayon[0] }}
+                                </span>
                                 <select id="village" name="village"  class="choice"  v-model="villageAddress">
-                                <option :value="null">-- Выберите из списка  --</option>
+                                <option value="">-- Выберите из списка  --</option>
                                 <option v-show="village.length"
                                     v-for="(item, i) in village"
                                     :value="item.id"
@@ -122,14 +136,18 @@
                                 <td><label for="phone">Контактные даннные</label></td>
                                 <td class="alert_inner">                            
                                 <input id="phone" class="form__input post__title" type="text" name="phone" v-model="phone">
-                                <span class="text-danger error-text phone_error"></span>
+                                <span v-if="errors.phone" class="text-red-500">
+                                        {{ errors.phone[0] }}
+                                </span>
                                 </td>
                             </tr>  
                             <tr>
                                 <td><label for="email">Адрес электронной почты</label></td>
                                 <td class="alert_inner">                            
                                 <input id="email" class="form__input post__title" type="text" name="email" v-model="email">
-                                <span class="text-danger error-text email_error"></span>
+                                <span v-if="errors.email" class="text-red-500">
+                                        {{ errors.email[0] }}
+                                </span>
                                 </td>
                             </tr>
                             <tr>
@@ -143,7 +161,7 @@
                         </tbody>
                     </table>                    
                     <div class="button-submit">                
-                    <button id="btn" class="button light-blue w-5" type="submit" @submit.prevent="createPost">
+                    <button id="btn" class="button light-blue" type="submit" @submit.prevent="createPost">
                             <div v-if="isLoading" class="place-content-center text-center items-center pl-4 pr-3">
                                 <svg class="animate-spin -ml-1 mr-1 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -172,7 +190,7 @@
 
     let { flash } = useFlash();
 
-    let isLoading = ref(true)
+    let isLoading = ref(false)
     let imageData = null
     let image = ref(null)
     let showModal = ref(false)
@@ -188,15 +206,15 @@
     let selected3 = ref('');
 
     let applicant_code = ref(null)
-    let certification_id = ref(null)
-    let tin = ref(null)
-    let farmer_name = ref(null)
-    let nameofdirector = ref(null)
+    let certification_id = ref('')
+    let tin = ref('')
+    let farmer_name = ref('')
+    let nameofdirector = ref('')
     let address = ref(null)
-    let oblast = ref(null);
-    let rayon = ref(null)
-    let villageAddress = ref(null)
-    let phone = ref(null)
+    let oblast = ref('');
+    let rayon = ref('')
+    let villageAddress = ref('')
+    let phone = ref('')
     let email = ref('')
 
     let errors = ref([])
@@ -297,6 +315,7 @@
                 );      
         } catch (err) {
             errors.value = err.response.data.errors;
+            console.log(errors.value);
             isLoading.value =false
         }
     }
