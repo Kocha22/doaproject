@@ -159,11 +159,23 @@ export default {
       if(this.filterValue === '') {
         var type = 'All';
       } else {
-        type = this.filterValue
+        this.type = this.filterValue
       }
       try {
-        const response = axios.get(`api/export/${type}`);
-        console.log('Hello');
+        axios.get(`api/export/${type}`, {responseType: 'blob'})
+        .then(response => {          
+          const url = window.URL.createObjectURL(new Blob([response.data]));
+          const link = document.createElement('a');
+          link.href = url;
+          link.setAttribute('download', 'users.xlsx');
+          document.body.appendChild(link);
+          link.click();
+          const data = response.data;
+          console.log(data);
+        })
+        .catch(error => {
+          console.error(error);
+        });        
       }
       catch(err) {
         console.log(err);
