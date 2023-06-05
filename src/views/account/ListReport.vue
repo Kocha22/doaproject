@@ -3,7 +3,7 @@
     <div class="content-wrapper">
         <section class="content text-sm table-sm">
           <div class="flex">
-                <select id='oblast' name="oblast" class="choice block w-full p-2 mb-6 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" @change.prevent="onChange($event)" v-model="filterValue">
+                <select id='oblast' name="oblast" class="choice block w-full p-2 mb-6 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" v-model="filterValue">
                         <option value="">Выберите область</option>
                         <option
                             v-for="(post, i) in posts2"
@@ -31,7 +31,7 @@
                   </tr>
               </thead>
               <tbody>
-                  <tr v-for="post  in posts" :key="post.id">
+                  <tr v-for="post  in filteredData" :key="post.id">
                   <td>{{ post.id }}</td>
                   <td>{{ post.farmer_status }}</td>
                   <td>
@@ -95,7 +95,7 @@
             </ul>
           </div>
         </section>
-        <button @click="exportExcel">Экспортировать в эксел</button>
+        <button class="ml-2 my-3 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" @click="exportExcel">Экспортировать в эксел</button>
     </div>
 </template>
 
@@ -109,11 +109,12 @@ export default {
       currentPage: 1,
       lastPage: 0,
       displayedPages: [],
-      filterValue: '',
+      filterValue: 0,
       total: 0,
       posts: {},
       posts2: {},
-      pageCount: 0
+      pageCount: 0,
+      searchQuery: ''
     };
   },
   mounted() {
@@ -162,7 +163,7 @@ export default {
         this.type = this.filterValue
       }
       try {
-        axios.get(`api/export/${type}`, {responseType: 'blob'})
+        axios.get(`api/export/${type}`, {responseType: 'arraybuffer'})
         .then(response => {          
           const url = window.URL.createObjectURL(new Blob([response.data]));
           const link = document.createElement('a');
@@ -180,8 +181,42 @@ export default {
       catch(err) {
         console.log(err);
       }
-    }
+    },
   },
+  computed: {
+      filteredData() {
+          let filtered = this.posts;
+          console.log(filtered);
+        
+          // Filter based on selected option
+          if (this.filterValue) {
+            console.log(this.filterValue);
+            filtered = filtered.filter(function(item) {
+                if(this.filterValue === 0) {
+                    console.log(this.filterValue);
+                    return item;
+                } else if (item.oblast === this.filterValue) {
+                    console.log(this.filterValue);
+                    return item;
+                } else {
+                  console.log(this.filterValue);
+                }            
+            });
+            console.log("Filtered by Option:", filtered);
+          } 
+
+      
+          // Filter based on search query
+          if (this.searchQuery) {
+            const query = this.searchQuery.toLowerCase();
+            filtered = filtered.filter(item => {
+              return item.farmer_name.toLowerCase().includes(query);
+            });
+          }
+          console.log(filtered);
+          return filtered;
+      }
+    }  
 };
 </script>
 

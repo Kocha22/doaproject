@@ -7,7 +7,7 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 /* import specific icons */
-import { faGripHorizontal, faChartBar, faBars, faMaximize, faSearch } from '@fortawesome/free-solid-svg-icons'
+import { faGripHorizontal, faChartBar, faBars, faMaximize, faSearch, faAngleLeft } from '@fortawesome/free-solid-svg-icons'
 import { faKeyboard, faUser, faMinusSquare, faAddressCard } from '@fortawesome/free-regular-svg-icons'
 
 /* add icons to the library */
@@ -20,7 +20,8 @@ library.add({
     faAddressCard,
     faBars,
     faMaximize,
-    faSearch
+    faSearch,
+    faAngleLeft
 })
 
 import App from './App.vue'

@@ -46,7 +46,9 @@
                 <a href="#" class="nav-link">
                     <!-- <i class="nav-icon fas fa-laptop"></i> -->
                     <font-awesome-icon :icon="['far', 'keyboard']" size="xl" />
-                    <p class="pl-2">Справочники</p>
+                    <p class="pl-2">Справочники
+                        <font-awesome-icon icon="fa-solid fa-angle-left" class="right"/>
+                    </p>
                 </a>
                 <ul class="nav nav-treeview">
                     <li class="nav-item">
@@ -79,7 +81,9 @@
                 <a href="#" class="nav-link">
                     <!-- <i class="nav-icon fas fa-laptop"></i> -->
                     <font-awesome-icon :icon="['far', 'keyboard']" size="xl" />
-                    <p class="pl-2">База Данных</p>
+                    <p class="pl-2">База Данных
+                        <font-awesome-icon icon="fa-solid fa-angle-left" class="right"/>
+                    </p>
                 </a>
                 <ul class="nav nav-treeview">
                     <li class="nav-item">
@@ -101,7 +105,10 @@
                 <a href="#" class="nav-link">
                     <!-- <i class="nav-icon fas fa-laptop"></i> -->
                     <font-awesome-icon :icon="['far', 'keyboard']" size="xl" />
-                    <p class="pl-2">Пользователи</p>
+                    <p class="pl-2">
+                        Пользователи
+                        <font-awesome-icon icon="fa-solid fa-angle-left" class="right"/>
+                    </p>                    
                 </a>
                 <ul class="nav nav-treeview">
                     <li class="nav-item">
