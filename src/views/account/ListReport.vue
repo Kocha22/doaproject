@@ -138,13 +138,7 @@ export default {
       searchQuery: '',
       selectedRayon: '',
       selectedVillage: '',
-      postArea: {},
-      type: '',
-      date: '',
-      day: '',
-      url: '',
-      link: '',
-      uniqueNumber: ''
+      postArea: {}
     };
   },
   mounted() {
@@ -189,31 +183,32 @@ export default {
     },
     exportExcel() {
       if(this.filterValue === '') {
-        this.type = 'All';
+        var type = 'All';
       } else {
-        this.type = this.filterValue
+        type = this.filterValue
       }
       try {
-        axios.get(`api/export/${this.type}`, {responseType: 'arraybuffer'})
+        axios.get(`api/export/${type}`, {responseType: 'arraybuffer'})
         .then(response => {          
-          this.url = window.URL.createObjectURL(new Blob([response.data]));
-          this.link = document.createElement('a');
-          this.link.href = this.url;
-          this.date = new Date()
-          this.day = this.date.toISOString().split('T')[0];
+          let url = window.URL.createObjectURL(new Blob([response.data]));
+          let link = document.createElement('a');
+          link.href = url;
+          let date = new Date()
+          let day = date.toISOString().split('T')[0];
 
           const digits = '0123456789';
           const numDigits = 6;
+          let uniqueNumber = '';
           
           for (let i = 0; i < numDigits; i++) {
             const randomIndex = Math.floor(Math.random() * digits.length);
             const digit = digits.charAt(randomIndex);
-            this.uniqueNumber += digit;
+            uniqueNumber += digit;
           }
 
-          this.link.setAttribute('download', `users-${this.uniqueNumber}.xlsx`);
-          document.body.appendChild(this.link);
-          this.link.click();        
+          link.setAttribute('download', `users-${uniqueNumber}.xlsx`);
+          document.body.appendChild(link);
+          link.click();        
           const data = response.data;
           console.log(data);
         })
