@@ -71,9 +71,10 @@
 
             <li class="nav-item ">
                 <router-link to="/account/list-applicant"
-                    class="nav-link">
+                    class="nav-link" >
                     <font-awesome-icon :icon="['far', 'address-card']" size="xl" />
                     <p class="pl-2">Заявки</p>
+                    <span class="right badge badge-success">22</span>
                 </router-link>
             </li>
 
@@ -150,15 +151,15 @@
             </li>
             <li class="nav-item ">   
                 <router-link to="/account/list-product"
-                    class="nav-link" >
+                    class="nav-link">
                     <font-awesome-icon icon="fa-solid fa-grip-horizontal" size="xl" />
                     <p class="pl-2">Продукция</p>
                 </router-link>
             </li>
 
-            <li class="nav-item ">   
+            <li class="nav-item">   
                 <router-link to="/account/list-report"
-                    class="nav-link" >
+                    class="nav-link">
                     <font-awesome-icon icon="fa-solid fa-grip-horizontal" size="xl" />
                     <p class="pl-2">Отчеты</p>
                 </router-link>
@@ -174,8 +175,21 @@
 <script setup>
     import { useUserStore } from '@/stores/user-store.js'
     import { useRouter } from 'vue-router';
+    import {ref, computed} from 'vue';
 
 
     const router = useRouter()
     const userStore = useUserStore()
+ 
 </script>
+<style scope>
+.active {
+    color: #42b983;
+}
+
+.exact-active-link {
+    color: #000 !important;
+    font-weight: bold !important;
+    background-color: rgba(0,0,0,.1) !important;
+}
+</style>

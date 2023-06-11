@@ -63,7 +63,7 @@
 <script setup>
 import VPagination from "@hennge/vue3-pagination";
 import "@hennge/vue3-pagination/dist/vue3-pagination.css";
-import Swal from 'sweetalert2'
+import Swal from '../../sweetalert2.js'
 import axios from 'axios'
 import { onBeforeMount, ref, computed } from 'vue';
 

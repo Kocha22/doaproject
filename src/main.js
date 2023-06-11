@@ -40,5 +40,4 @@ app.component('font-awesome-icon', FontAwesomeIcon)
 app.use(pinia)
 app.use(router)
 
-
 app.mount('#app')

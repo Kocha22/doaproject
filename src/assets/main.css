@@ -1135,6 +1135,15 @@ h6 {
   position: relative;
 }
 
+.active {
+  color: #42b983;
+}
+
+.exact-active-link {
+  color: #42b983;
+  font-weight: bold;
+}
+
 .personal_title{
   position: absolute;
   top: 50%;

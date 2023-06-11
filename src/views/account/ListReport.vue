@@ -13,6 +13,27 @@
                             >{{ post.name_ru }}</option
                         >
                 </select>
+                <select id="rayon" name="rayon"  class="choice block w-full p-2 mb-6 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  @change.prevent="onChange($event)" v-model="selectedRayon">
+                <option value="">Выберите район</option>
+                
+                <option 
+                    v-for="(post, i) in getArea"
+                    :value="post.id"
+                    :key="post.id"  
+                    :data-id="post.id"                                
+                    >{{ post.name_ru }}</option
+                >
+                </select>
+                <select id="village" name="village"  class="choice block w-full p-2 mb-6 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" v-model="selectedVillage">
+                <option value=''>Выберите город или село</option>
+                <option 
+                    v-for="(post, i) in getVillage"
+                    :value="post.id"
+                    :key="post.id"  
+                    :data-id="post.id"                                  
+                    >{{ post.name_ru }}</option
+                >
+                </select>
             </div>
 
             <input type="text" v-model="searchQuery" placeholder="Поиск" class="block w-full p-2 mb-6 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
@@ -109,12 +130,21 @@ export default {
       currentPage: 1,
       lastPage: 0,
       displayedPages: [],
-      filterValue: 0,
+      filterValue: '',
       total: 0,
       posts: {},
       posts2: {},
       pageCount: 0,
-      searchQuery: ''
+      searchQuery: '',
+      selectedRayon: '',
+      selectedVillage: '',
+      postArea: {},
+      type: '',
+      date: '',
+      day: '',
+      url: '',
+      link: '',
+      uniqueNumber: ''
     };
   },
   mounted() {
@@ -126,6 +156,7 @@ export default {
         const response = await axios.get('api/getreport?page='+this.currentPage);
         const areas = await axios.get('api/area')
         this.posts2 = areas.data[0].children
+        this.postArea = areas.data
         this.pageCount = response.data.page_count
         this.posts = response.data.posts.data
         this.users = response.data.data; // Store the users data
@@ -158,19 +189,31 @@ export default {
     },
     exportExcel() {
       if(this.filterValue === '') {
-        var type = 'All';
+        this.type = 'All';
       } else {
         this.type = this.filterValue
       }
       try {
-        axios.get(`api/export/${type}`, {responseType: 'arraybuffer'})
+        axios.get(`api/export/${this.type}`, {responseType: 'arraybuffer'})
         .then(response => {          
-          const url = window.URL.createObjectURL(new Blob([response.data]));
-          const link = document.createElement('a');
-          link.href = url;
-          link.setAttribute('download', 'users.xlsx');
-          document.body.appendChild(link);
-          link.click();
+          this.url = window.URL.createObjectURL(new Blob([response.data]));
+          this.link = document.createElement('a');
+          this.link.href = this.url;
+          this.date = new Date()
+          this.day = this.date.toISOString().split('T')[0];
+
+          const digits = '0123456789';
+          const numDigits = 6;
+          
+          for (let i = 0; i < numDigits; i++) {
+            const randomIndex = Math.floor(Math.random() * digits.length);
+            const digit = digits.charAt(randomIndex);
+            this.uniqueNumber += digit;
+          }
+
+          this.link.setAttribute('download', `users-${this.uniqueNumber}.xlsx`);
+          document.body.appendChild(this.link);
+          this.link.click();        
           const data = response.data;
           console.log(data);
         })
@@ -181,7 +224,7 @@ export default {
       catch(err) {
         console.log(err);
       }
-    },
+    }
   },
   computed: {
       filteredData() {
@@ -191,17 +234,37 @@ export default {
           // Filter based on selected option
           if (this.filterValue) {
             console.log(this.filterValue);
-            filtered = filtered.filter(function(item) {
-                if(this.filterValue === 0) {
+            filtered = filtered.filter(item => {
+                if(this.filterValue == '') {
                     console.log(this.filterValue);
                     return item;
-                } else if (item.oblast === this.filterValue) {
+                } else if (item.oblast == this.filterValue) {
                     console.log(this.filterValue);
                     return item;
                 } else {
                   console.log(this.filterValue);
-                }            
+                }                    
             });
+
+            if (this.selectedRayon) {
+                  filtered = filtered.filter(item => {
+                      if(this.selectedRayon == 0) {
+                          return item;
+                      } else if (item.rayon == this.selectedRayon) {
+                          return item;
+                      }   
+                  });
+            }    
+            
+            if (this.selectedVillage) {
+                  filtered = filtered.filter(item => {
+                      if(this.selectedVillage == 0) {
+                          return item;
+                      } else if (item.village == this.selectedVillage) {
+                          return item;
+                      }   
+                  });
+            }
             console.log("Filtered by Option:", filtered);
           } 
 
@@ -215,6 +278,37 @@ export default {
           }
           console.log(filtered);
           return filtered;
+      },
+      getArea() {        
+        if (this.filterValue) {
+          let filtered = this.postArea;
+          console.log(filtered);
+            filtered = filtered.filter(item => {
+                if(item.parent == this.filterValue) {
+                    return item;
+                } 
+            });
+            console.log(filtered);
+            return filtered;
+        } else {
+          this.selectedRayon = ''
+        }
+        
+      },
+      getVillage() {        
+        if (this.selectedRayon) {
+            let filtered = this.postArea;
+            console.log(filtered);
+            filtered = filtered.filter(item => {
+                if(item.parent == this.selectedRayon) {
+                    return item;
+                } 
+            });
+            console.log(filtered);
+            return filtered;
+        } else {
+          this.selectedVillage = ''
+        }    
       }
     }  
 };

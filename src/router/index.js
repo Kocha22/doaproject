@@ -145,7 +145,9 @@ const router = createRouter({
         }
       ]
     }
-  ]
+  ],
+  linkActiveClass: 'active-link',
+  linkExactActiveClass: 'exact-active-link',
 })
 
 export default router
