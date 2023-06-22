@@ -1,16 +1,16 @@
 <template>
     <div class="content-wrapper">
         <section class="content text-sm table-sm">
-            <div div class="btn-group" role="group">
+            <div div class="btn-group my-2" role="group">
                 <button class="button_1 btn btn-orange" @click.prevent="setSelectedOption('all')"  name="but1">Поданные заявки</button>
                 <button class="button_1 btn btn-blue" name="but1" @click.prevent="setSelectedOption('4')" value="4">На рассмотрений</button>
                 <button class="button_1 btn btn-green" name="but2" @click.prevent="setSelectedOption('2')" value="2">Утвержденные</button>
                 <button class="button_1 btn btn-red" name="but3" @click.prevent="setSelectedOption('3')" value="3">Отклоненные заявки</button>
             </div>
             <section class="news">
-                <h1 class="title">Заявки</h1>
+                <h1 class="text-4xl">Заявки</h1>
                 <div class="form-gr">
-                    <input type="text" v-model="searchQuery" placeholder="Search">
+                    <input type="text" v-model="searchQuery" placeholder="Search" class="block w-full p-2 my-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 </div>
                 <table id="customers">
                     <thead>

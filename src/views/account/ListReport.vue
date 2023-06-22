@@ -3,7 +3,7 @@
     <div class="content-wrapper">
         <section class="content text-sm table-sm">
           <div class="flex">
-                <select id='oblast' name="oblast" class="choice block w-full p-2 mb-6 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" v-model="filterValue">
+                <select id='oblast' name="oblast" class="choice block w-full p-2 my-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" v-model="filterValue">
                         <option value="">Выберите область</option>
                         <option
                             v-for="(post, i) in posts2"
@@ -13,7 +13,7 @@
                             >{{ post.name_ru }}</option
                         >
                 </select>
-                <select id="rayon" name="rayon"  class="choice block w-full p-2 mb-6 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  @change.prevent="onChange($event)" v-model="selectedRayon">
+                <select id="rayon" name="rayon"  class="choice block w-full p-2 my-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  @change.prevent="onChange($event)" v-model="selectedRayon">
                 <option value="">Выберите район</option>
                 
                 <option 
@@ -24,7 +24,7 @@
                     >{{ post.name_ru }}</option
                 >
                 </select>
-                <select id="village" name="village"  class="choice block w-full p-2 mb-6 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" v-model="selectedVillage">
+                <select id="village" name="village"  class="choice block w-full p-2 my-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" v-model="selectedVillage">
                 <option value=''>Выберите город или село</option>
                 <option 
                     v-for="(post, i) in getVillage"
@@ -36,7 +36,7 @@
                 </select>
             </div>
 
-            <input type="text" v-model="searchQuery" placeholder="Поиск" class="block w-full p-2 mb-6 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            <input type="text" v-model="searchQuery" placeholder="Поиск" class="block w-full p-2 my-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
 
           <table id="customers">        
               <thead>

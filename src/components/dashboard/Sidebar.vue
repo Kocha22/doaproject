@@ -43,7 +43,7 @@
             </li>
 
             <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="#" class="nav-link" @click="toggleMenu">
                     <!-- <i class="nav-icon fas fa-laptop"></i> -->
                     <font-awesome-icon :icon="['far', 'keyboard']" size="xl" />
                     <p class="pl-2">Справочники
@@ -79,7 +79,7 @@
             </li>
 
             <li class="nav-item ">
-                <a href="#" class="nav-link">
+                <a href="#" class="nav-link" @click="toggleMenu">
                     <!-- <i class="nav-icon fas fa-laptop"></i> -->
                     <font-awesome-icon :icon="['far', 'keyboard']" size="xl" />
                     <p class="pl-2">База Данных
@@ -103,7 +103,7 @@
             </li>
 
             <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="#" class="nav-link" @click="toggleMenu">
                     <!-- <i class="nav-icon fas fa-laptop"></i> -->
                     <font-awesome-icon :icon="['far', 'keyboard']" size="xl" />
                     <p class="pl-2">
@@ -177,10 +177,13 @@
     import { useRouter } from 'vue-router';
     import {ref, computed} from 'vue';
 
-
     const router = useRouter()
-    const userStore = useUserStore()
- 
+    const userStore = useUserStore() 
+    const isMenuOpen = ref(false);
+
+    const toggleMenu = () => {
+        isMenuOpen.value = !isMenuOpen.value
+    }
 </script>
 <style scope>
 .active {
