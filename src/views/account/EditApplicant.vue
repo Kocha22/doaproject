@@ -305,7 +305,7 @@
             await axios.post(`api/updateapplicant/${route.params.id}`, data);   
             swal({title: "Good job", text: "You clicked the button!", type: 
                 "success"}).then(function(){ 
-                location.reload();
+                window.location = '/account/list-applicant';
                 }
                 );      
         } catch (err) {

@@ -175,11 +175,15 @@
 <script setup>
     import { useUserStore } from '@/stores/user-store.js'
     import { useRouter } from 'vue-router';
-    import {ref, computed} from 'vue';
+    import {onBeforeMount, ref, computed} from 'vue';
 
     const router = useRouter()
     const userStore = useUserStore() 
     const isMenuOpen = ref(false);
+
+    onBeforeMount(() => {
+        toggleMenu()
+    })
 
     const toggleMenu = () => {
         isMenuOpen.value = !isMenuOpen.value

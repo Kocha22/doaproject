@@ -1,9 +1,8 @@
 <template>
-    <div v-if="loading">Loading...</div>
     <div class="content-wrapper">
         <section class="content text-sm table-sm">
-            <div class="flex">
-                <select id='oblast' name="oblast" class="choice block w-full p-2 mb-6 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" @change.prevent="onChange($event)" v-model="selectedOption">
+            <div class="flex my-2">
+                <select id='oblast' name="oblast" class="choice block w-full p-2 mr-1 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" @change.prevent="onChange($event)" v-model="selectedOption">
                         <option value="0">Выберите адрес</option>
                         <option
                             v-for="(post, i) in posts2"
@@ -13,7 +12,7 @@
                             >{{ post.name_ru }}</option
                         >
                 </select>
-                <select id="rayon" name="rayon"  class="choice block w-full p-2 mb-6 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  @change.prevent="onChange($event)" v-model="selectedRayon">
+                <select id="rayon" name="rayon"  class="choice block w-full p-2 mr-1 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  @change.prevent="onChange($event)" v-model="selectedRayon">
                         <option value='0'>-- Выберите из списка  --</option>
                         
                         <option v-show="rayons.length"
@@ -24,7 +23,7 @@
                             >{{ post.name_ru }}</option
                         >
                 </select>
-                <select id="village" name="village"  class="choice block w-full p-2 mb-6 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" v-model="selectedVillage">
+                <select id="village" name="village"  class="choice block w-full p-2 mr-1 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" v-model="selectedVillage">
                         <option value='0'>-- Выберите из списка  --</option>
                         <option v-show="village.length"
                             v-for="(post, i) in village"
@@ -37,7 +36,7 @@
                 
             </div>
 
-            <input type="text" v-model="searchQuery" placeholder="Search" class="block w-full p-2 mb-6 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
+            <input type="text" v-model="searchQuery" placeholder="Search" class="block w-full p-2 my-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
             
             <table id="customers">        
                 <thead>

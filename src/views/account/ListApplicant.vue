@@ -1,6 +1,6 @@
 <template>
     <div class="content-wrapper">
-        <section class="content text-sm table-sm">
+        <section class="content text-sm table-sm mb-3">
             <div div class="btn-group my-2" role="group">
                 <button class="button_1 btn btn-orange" @click.prevent="setSelectedOption('all')"  name="but1">Поданные заявки</button>
                 <button class="button_1 btn btn-blue" name="but1" @click.prevent="setSelectedOption('4')" value="4">На рассмотрений</button>
